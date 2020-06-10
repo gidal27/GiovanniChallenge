@@ -5,6 +5,12 @@ VisualStudioVersion = 16.0.30002.166
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IMNAT.School.CLI", "IMNAT.School.CLI\IMNAT.School.CLI.csproj", "{B83B5FA5-A1EF-413B-9265-AE69A1D992E6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IMNAT.School.Models", "IMNAT.School.Models\IMNAT.School.Models.csproj", "{0AC93868-EDED-40C1-8DF3-BDA1AB7BC128}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IMNAT.School.Repositories", "IMNAT.School.Repositories\IMNAT.School.Repositories.csproj", "{FE0007BF-AA13-4FCF-A091-E1D757E85827}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IMNAT.School.Services", "IMNAT.School.Services\IMNAT.School.Services.csproj", "{3D76E030-8F18-4B40-A739-D99485792001}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +21,18 @@ Global
 		{B83B5FA5-A1EF-413B-9265-AE69A1D992E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B83B5FA5-A1EF-413B-9265-AE69A1D992E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B83B5FA5-A1EF-413B-9265-AE69A1D992E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0AC93868-EDED-40C1-8DF3-BDA1AB7BC128}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AC93868-EDED-40C1-8DF3-BDA1AB7BC128}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0AC93868-EDED-40C1-8DF3-BDA1AB7BC128}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0AC93868-EDED-40C1-8DF3-BDA1AB7BC128}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE0007BF-AA13-4FCF-A091-E1D757E85827}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE0007BF-AA13-4FCF-A091-E1D757E85827}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE0007BF-AA13-4FCF-A091-E1D757E85827}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE0007BF-AA13-4FCF-A091-E1D757E85827}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D76E030-8F18-4B40-A739-D99485792001}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D76E030-8F18-4B40-A739-D99485792001}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D76E030-8F18-4B40-A739-D99485792001}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D76E030-8F18-4B40-A739-D99485792001}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
