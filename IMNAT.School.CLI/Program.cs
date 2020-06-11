@@ -40,36 +40,36 @@ namespace IMNAT.School.CLI
 
             public SchoolManagement(SchoolDbContext SchoolDbContext) => _SchoolDbContext = SchoolDbContext;
 
-            public void SeedDatabase()
-            {
-                // we feed database with first elements 
-                var table = _SchoolDbContext.Courses;
-                string[] InitialValues = FileConfigRead.InitialContent; // a surveiller durant le temps d'execution
-                Course InitialSingleContent = new Course();
-                List<Course> InitialContent = new List<Course>();
+            //public void SeedDatabase()
+            //{
+            //    // we feed database with first elements 
+            //    var table = _SchoolDbContext.Courses;
+            //    string[] InitialValues = FileConfigRead.InitialContent; // a surveiller durant le temps d'execution
+            //    Course InitialSingleContent = new Course();
+            //    List<Course> InitialContent = new List<Course>();
              
-                if (table.CountAsync().Result == 0) // we check if there  is already 
-                {
-                    for (int i = 0; i < InitialValues.Length; i++)
-                    {
-                        InitialSingleContent.Name = InitialValues[i];
+            //    if (table.CountAsync().Result == 0) // we check if there  is already 
+            //    {
+            //        for (int i = 0; i < InitialValues.Length; i++)
+            //        {
+            //            InitialSingleContent.Name = InitialValues[i];
 
-                        InitialContent.Add(InitialSingleContent);
-                    };
+            //             InitialContent.Add(InitialSingleContent);
+            //        };
 
-                    try
-                    {
-                        foreach (Course course in InitialContent)
-                        {
-                            table.AddAsync(course);
+            //        try
+            //        {
+            //            foreach (Course course in InitialContent)
+            //            {
+            //                table.AddAsync(course);
 
-                        }
-                        _SchoolDbContext.SaveChangesAsync();
-                    }
-                    catch (Exception e) { Console.WriteLine(e.ToString()); }
+            //            }
+            //            _SchoolDbContext.SaveChangesAsync();
+            //        }
+            //        catch (Exception e) { Console.WriteLine(e.ToString()); }
 
-                }
-            }
+            //    }
+            //}
                     
                     public void Run()
                     {
@@ -126,7 +126,9 @@ namespace IMNAT.School.CLI
             using (var scope = CreateServiceProvider().CreateScope())
             {
 
-                scope.ServiceProvider.GetService<SchoolManagement>().SeedDatabase();
+               // scope.ServiceProvider.GetService<SchoolManagement>().SeedDatabase();
+
+
             }
         }
 

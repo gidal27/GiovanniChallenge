@@ -6,8 +6,7 @@ namespace IMNAT.School.Services.Services
 {
     public interface IStudentManagement
     {
-       void CreateStudent(string studentName);
-
+       void CreateStudent(string studentName, string email);
 
     }
 }

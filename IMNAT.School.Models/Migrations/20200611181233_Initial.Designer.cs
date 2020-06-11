@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IMNAT.School.Models.Migrations
 {
     [DbContext(typeof(SchoolDbContext))]
-    [Migration("20200611172446_Initial")]
+    [Migration("20200611181233_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
