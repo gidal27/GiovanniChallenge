@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿
+using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace IMNAT.School.CLI.Migrations
+
+namespace IMNAT.School.Models.Migrations
 {
     public partial class Initial : Migration
     {

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using IMNAT.School.Models.Entities.DomainModels;
 
-namespace IMNAT.School.CLI
+namespace IMNAT.School.Services
 {
     public class SchoolDbContext: DbContext
     {

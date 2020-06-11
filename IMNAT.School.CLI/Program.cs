@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using IMNAT.School.Services;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
@@ -64,7 +65,7 @@ namespace IMNAT.School.CLI
 
             //var Services = new ServiceCollection();
 
-            Services.AddDbContext<SchoolDbContext>(options => options.UseSqlServer(appConfig.Connection));
+            Services.AddDbContext<SchoolDbContext>(options => options.UseSqlServer(appConfig.Connection, b => b.MigrationsAssembly("IMNAT.School.Models")));
             Services.AddSingleton<SchoolManagement>();
 
         }
