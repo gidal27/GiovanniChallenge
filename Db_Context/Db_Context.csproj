@@ -5,8 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Db_Context\Db_Context.csproj" />
-    <ProjectReference Include="..\IMNAT.School.Repositories\IMNAT.School.Repositories.csproj" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.5" />
   </ItemGroup>
 
 </Project>
