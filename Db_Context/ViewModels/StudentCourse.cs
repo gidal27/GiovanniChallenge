@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Db_Context.ViewModels
+namespace ViewModel
 {
     public class StudentCourse
     {

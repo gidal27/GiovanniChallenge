@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IMNAT.School.Repositories",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IMNAT.School.Services", "IMNAT.School.Services\IMNAT.School.Services.csproj", "{3D76E030-8F18-4B40-A739-D99485792001}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Db_Context", "Db_Context\Db_Context.csproj", "{0033E223-5DBB-486A-A12B-1B9FBA0258F2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ViewModel", "Db_Context\ViewModel.csproj", "{0033E223-5DBB-486A-A12B-1B9FBA0258F2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

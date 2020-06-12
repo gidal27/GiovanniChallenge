@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
-namespace Db_Context
+namespace ViewModel
 {
     public class Course
     {

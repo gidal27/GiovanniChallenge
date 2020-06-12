@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\IMNAT.School.Models\IMNAT.School.Models.csproj" />
+    <ProjectReference Include="..\Db_Context\ViewModel.csproj" />
   </ItemGroup>
 
 </Project>

@@ -19,7 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Db_Context\Db_Context.csproj" />
+    <ProjectReference Include="..\Db_Context\ViewModel.csproj" />
+    <ProjectReference Include="..\IMNAT.School.Repositories\IMNAT.School.Repositories.csproj" />
   </ItemGroup>
 
 </Project>

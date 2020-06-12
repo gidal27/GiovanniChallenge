@@ -1,11 +1,12 @@
 ﻿using Db_Context;
-using Db_Context.ViewModels;
+using ViewModel;
 using IMNAT.School.Services.Services.Configurations;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ViewModel;
 using static IMNAT.School.Services.Services.Configurations.StartUp;
 
 namespace IMNAT.School.Services.Services.Implementations

@@ -1,15 +1,9 @@
 ﻿using Db_Context;
-using Db_Context.ViewModels;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
 using IMNAT.School.Services.Services.Configurations;
 using IMNAT.School.Services.Services.Implementations;
+using ViewModel;
 
 namespace IMNAT.School.CLI
 {

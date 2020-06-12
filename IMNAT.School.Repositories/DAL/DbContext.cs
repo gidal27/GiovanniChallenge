@@ -1,9 +1,8 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Text;
-using Db_Context.ViewModels;
+using ViewModel;
 
 namespace Db_Context
 {

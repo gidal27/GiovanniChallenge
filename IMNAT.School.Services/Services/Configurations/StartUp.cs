@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Db_Context.ViewModels;
+using ViewModel;
 using Microsoft.EntityFrameworkCore.Design;
 using System.Data;
 using System.Linq;
