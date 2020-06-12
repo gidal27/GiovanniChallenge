@@ -5,7 +5,7 @@ using System.Text;
 
 namespace IMNAT.School.Repositories.DAL.Repository.Implementations
 {
-    public class StudentsRepo
+    public class StudentsRepo: IStudentrepo
     {
         private SchoolDbContext _context;
 

@@ -13,23 +13,15 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
-
-
+using IMNAT.School.Services.Services.Implementations;
+using IMNAT.School.Services.Services;
+using IMNAT.School.Repositories.DAL;
+using IMNAT.School.Repositories.DAL.Repository;
+using IMNAT.School.Repositories.DAL.Repository.Implementations;
+using Db_Context.ViewModels;
 
 namespace IMNAT.School.CLI
 {
-    public class StartUp
-    {
-        public StartUp(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
-
-        public static IConfiguration Configuration { get; set; }
-      
-
-    }
-
     class Program
     {
         
@@ -38,40 +30,61 @@ namespace IMNAT.School.CLI
         {
             readonly SchoolDbContext _SchoolDbContext;
 
+        /*-------------------------------------------------------------------------------------------------*/
             public SchoolManagement(SchoolDbContext SchoolDbContext) => _SchoolDbContext = SchoolDbContext;
 
-            //public void SeedDatabase()
-            //{
-            //    // we feed database with first elements 
-            //    var table = _SchoolDbContext.Courses;
-            //    string[] InitialValues = FileConfigRead.InitialContent; // a surveiller durant le temps d'execution
-            //    Course InitialSingleContent = new Course();
-            //    List<Course> InitialContent = new List<Course>();
-             
-            //    if (table.CountAsync().Result == 0) // we check if there  is already 
-            //    {
-            //        for (int i = 0; i < InitialValues.Length; i++)
-            //        {
-            //            InitialSingleContent.Name = InitialValues[i];
+            public IEnumerable<Course> GetAllCourses()
+            {
 
-            //             InitialContent.Add(InitialSingleContent);
-            //        };
 
-            //        try
-            //        {
-            //            foreach (Course course in InitialContent)
-            //            {
-            //                table.AddAsync(course);
+                var ListCourses = _SchoolDbContext.Courses;
 
-            //            }
-            //            _SchoolDbContext.SaveChangesAsync();
-            //        }
-            //        catch (Exception e) { Console.WriteLine(e.ToString()); }
+                return ListCourses;
+            }
+          /*------------------------------------------------------------------------------------------------------------------*/
 
-            //    }
-            //}
-                    
-                    public void Run()
+            public string CreateStudent(string StudentName, string email)
+            {
+                string[] Names = StudentName.Split(' ');
+                Student student = new Student();
+
+                if (Names.Length > 2)
+                {
+                    for (int i = 0; i < Names.Length; i++)
+                    { student.FirstName += (Names[i]+ " "); }
+
+                    student.LastName = Names[(Names.Length - 1)];
+                    student.Email = email;
+                }
+
+                else
+                {
+                    student.FirstName = Names[0]; student.LastName = Names[1];
+                    student.Email = email;
+                }
+
+                _SchoolDbContext.Students.Add(student);
+
+                _SchoolDbContext.SaveChanges();
+                return (student.LastName);
+            }
+
+            /*--------------------------------------------------------------------------------------------------*/
+            public void LinkStudentToCourse(string StudentName, int CourseID) {
+
+                StudentCourse Selection = new StudentCourse {SelectedCourseID = CourseID, Student =StudentName };
+
+                try
+                {
+                    _SchoolDbContext.SelectedCourses.Add(Selection);
+                    _SchoolDbContext.SaveChanges();
+                }
+                catch (Exception e) { Console.WriteLine(e.ToString()); }
+            }
+
+        /*------------------------------------------------------------------------------------------------------*/
+
+            public void Run()
                     {
                         Console.WriteLine("Test de creation de la BD");
                     }
@@ -116,18 +129,56 @@ namespace IMNAT.School.CLI
 
             Services.AddDbContext<SchoolDbContext>(options => options.UseSqlServer(appConfig.Connection, b => b.MigrationsAssembly("IMNAT.School.Models")));
             Services.AddSingleton<SchoolManagement>();
-
-        
+            Services.AddSingleton<ICourseManagement, CourseManagement>();
+            Services.AddSingleton<ICoursesRepo, CoursesRepo>();
+            Services.AddSingleton<IStudentrepo, StudentsRepo>();
+            Services.AddSingleton<IStudentManagement, StudentManagement>();
         }
 
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
-            // Exe
+            
             using (var scope = CreateServiceProvider().CreateScope())
             {
+                
+               var Courses= scope.ServiceProvider.GetService<SchoolManagement>().GetAllCourses();
 
-               // scope.ServiceProvider.GetService<SchoolManagement>().SeedDatabase();
+                if (Courses != null)
+                {
+                    Console.WriteLine("----- Voici la liste des cours disponibles ------------ \n\n\n");
 
+                    foreach (Course course in Courses)
+                    {
+                        Console.WriteLine("{0} ---------- {1}\n", course.Id, course.Name);
+                    }
+
+                }
+                else
+                {
+                    Console.WriteLine("Je dois me soumettre a Giovanni");
+                       return 0; 
+                        };
+
+                Console.WriteLine("--------------- Quel est vos Nom(s)?(dans cet ordre prenom(s)/nom):  ");
+
+                  var Noms = Console.ReadLine();
+
+                Console.WriteLine("---------------  Ecrivez votre adresse courriel SVP?:   ");
+
+                var Courriel = Console.ReadLine();
+
+                 var Nom = scope.ServiceProvider.GetService<SchoolManagement>().CreateStudent(Noms, Courriel);
+
+                Console.WriteLine("------------ Entrer le numero du cours auquel vous souhaitez vous inscrire :  ");
+
+                var courseNoString = Console.ReadLine();
+                var courseNoInt = Int16.Parse(courseNoString);
+              
+                scope.ServiceProvider.GetService<SchoolManagement>().LinkStudentToCourse(Nom, courseNoInt);
+
+                Console.WriteLine("------ Souhaitez vous en choisir d'autres?")
+
+                return 0;
 
             }
         }

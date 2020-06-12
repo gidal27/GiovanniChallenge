@@ -20,6 +20,20 @@ namespace IMNAT.School.Models.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SelectedCourses",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SelectedCourseID = table.Column<int>(nullable: false),
+                    Student = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SelectedCourses", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Students",
                 columns: table => new
                 {
@@ -39,6 +53,9 @@ namespace IMNAT.School.Models.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Courses");
+
+            migrationBuilder.DropTable(
+                name: "SelectedCourses");
 
             migrationBuilder.DropTable(
                 name: "Students");

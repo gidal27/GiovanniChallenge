@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IMNAT.School.Models.Migrations
 {
     [DbContext(typeof(SchoolDbContext))]
-    [Migration("20200611181233_Initial")]
+    [Migration("20200612040353_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,6 +54,24 @@ namespace IMNAT.School.Models.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Students");
+                });
+
+            modelBuilder.Entity("Db_Context.ViewModels.StudentCourse", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("SelectedCourseID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Student")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("SelectedCourses");
                 });
 #pragma warning restore 612, 618
         }

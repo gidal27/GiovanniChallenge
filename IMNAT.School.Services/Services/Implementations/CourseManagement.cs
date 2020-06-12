@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Db_Context;
 using IMNAT.School.Repositories.DAL.Repository;
 using IMNAT.School.Repositories.DAL.Repository.Implementations;
 using IMNAT.School.Services.Services;
@@ -9,7 +10,7 @@ namespace IMNAT.School.Services.Services.Implementations
 {
     public class CourseManagement : ICourseManagement
     {
-        private readonly ICoursesRepo _coursesRepo;
+         readonly ICoursesRepo _coursesRepo;
 
         public CourseManagement(ICoursesRepo coursesRepo)
         {
@@ -17,18 +18,21 @@ namespace IMNAT.School.Services.Services.Implementations
 
         }
 
-        public void DisplayAvailableCourses() {
+        public IEnumerable<Course> DisplayAvailableCourses() {
 
-            ret
+            var ListCourses = _coursesRepo.GetAllCourses();
+         
+                return ListCourses;
+            }
 
-        }
+        
 
         public void LinkStudentToCourse() {
         
         }
 
-        public void DisplaySelectedCourses() { 
+        //public void DisplaySelectedCourses() { 
         
-        }
+        //}
     }
 }
