@@ -1,10 +1,5 @@
 ﻿using Db_Context;
 using Db_Context.ViewModels;
-using IMNAT.School.Repositories.DAL;
-using IMNAT.School.Repositories.DAL.Repository;
-using IMNAT.School.Repositories.DAL.Repository.Implementations;
-using IMNAT.School.Services.Services;
-using IMNAT.School.Services.Services.Implementations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
@@ -24,9 +19,52 @@ namespace IMNAT.School.CLI
         {
             readonly SchoolDbContext _SchoolDbContext;
 
-        /*-------------------------------------------------------------------------------------------------*/
+        /// <summary>
+        /// Class Service called in main for doing all required Tasks...
+        /// </summary>
+        /// <param name="SchoolDbContext"></param>
+        /// 
+
             public SchoolManagement(SchoolDbContext SchoolDbContext) => _SchoolDbContext = SchoolDbContext;
 
+            /// <summary>
+            /// fill dataTable Course with some initial values....
+            /// </summary>
+            public void SeedDatabase()
+            {
+                var table = _SchoolDbContext.Courses;
+                string[] InitialValues = FileConfigRead.InitialContent; // a surveiller durant le temps d'execution
+                Course InitialSingleContent = new Course();
+                List<Course> InitialContent = new List<Course>();
+                
+
+                if (table.Count()== 0) // we check if there  is already some initial values...
+                {
+                    for (int i = 0; i < InitialValues.Length; i++)
+                    {
+
+                        InitialContent.Add(new Course {Name= InitialValues[i]});
+                    };
+
+                    try
+                    {
+                        foreach (Course course in InitialContent)
+                        {
+                            _SchoolDbContext.Courses.Add(course);
+
+                        }
+                        _SchoolDbContext.SaveChanges();
+                    }
+                    catch (Exception e) { Console.WriteLine(e.ToString()); }
+
+                }
+            }
+
+
+            /// <summary>
+            /// Get all courses in database
+            /// </summary>
+            /// <returns>Courses </returns>
             public IEnumerable<Course> GetAllCourses()
             {
 
@@ -35,7 +73,12 @@ namespace IMNAT.School.CLI
 
                 return ListCourses;
             }
-          /*------------------------------------------------------------------------------------------------------------------*/
+            /// <summary>
+            /// Create a student in database..
+            /// </summary>
+            /// <param name="StudentName"></param>
+            /// <param name="email"></param>
+            /// <returns>string</returns>
 
             public string CreateStudent(string StudentName, string email)
             {
@@ -63,7 +106,11 @@ namespace IMNAT.School.CLI
                 return (student.LastName);
             }
 
-            /*--------------------------------------------------------------------------------------------------*/
+           /// <summary>
+           /// Make the junction between a student and a course selected
+           /// </summary>
+           /// <param name="StudentName"></param>
+           /// <param name="CourseID"></param>
             public void LinkStudentToCourse(string StudentName, int CourseID) {
 
                 StudentCourse Selection = new StudentCourse {SelectedCourseID = CourseID, Student =StudentName };
@@ -76,7 +123,10 @@ namespace IMNAT.School.CLI
                 catch (Exception e) { Console.WriteLine(e.ToString()); }
             }
 
-            /*------------------------------------------------------------------------------------------------------*/
+            /// <summary>
+            /// Display Selected all course selected
+            /// </summary>
+            /// <returns></returns>
 
             public Dictionary<string, IEnumerable<string>> DisplaySelection() {
 
@@ -99,61 +149,57 @@ namespace IMNAT.School.CLI
                 return AllSelections;
 
             }
-
-        /*--------------------------------------------------------------------------------------------------------*/
-         
-            
+   
         }
-        public class MySettings
-        {
-            public string Connection { get; set; }
-            public string[] InitialCourses { get; set; }
-        }
+                    public class MySettings
+                    {
+                        public string Connection { get; set; }
+                        public string[] InitialCourses { get; set; }
+                    }
 
-        private static IServiceProvider CreateServiceProvider()
-        {
-            // create service collection
-            IServiceCollection services = new ServiceCollection();
-            ConfigureServices(services);
+                    private static IServiceProvider CreateServiceProvider()
+                    {
+                        // create service collection
+                        IServiceCollection services = new ServiceCollection();
+                        ConfigureServices(services);
 
-            // create service provider
-            return services.BuildServiceProvider();
-        }
+                        // create service provider
+                        return services.BuildServiceProvider();
+                    }
 
-        public static class FileConfigRead {
+                        public static class FileConfigRead {
 
-            public static  string[] InitialContent { get; set; }
-        }
+                            public static  string[] InitialContent { get; set; }
+                        }
 
 
-        public static void ConfigureServices(IServiceCollection Services)
-        {
+                        public static void ConfigureServices(IServiceCollection Services)
+                        {
 
-            var config = new ConfigurationBuilder()
-                  .AddJsonFile("appsettings.json")
-                  .Build();
+                            var config = new ConfigurationBuilder()
+                                  .AddJsonFile("appsettings.json")
+                                  .Build();
 
-            var appConfig = config.GetSection("application").Get<MySettings>(); // get connection strings
-            var InitialData = config.GetSection("Data").Get<MySettings>(); //to get initial data to seed database
+                            var appConfig = config.GetSection("application").Get<MySettings>(); // get connection strings
+                            var InitialData = config.GetSection("Data").Get<MySettings>(); //to get initial data to seed database
 
-            FileConfigRead.InitialContent = InitialData.InitialCourses;
-            var InitialContent = appConfig.InitialCourses;
+                            FileConfigRead.InitialContent = InitialData.InitialCourses;
+                            var InitialContent = appConfig.InitialCourses;
 
-            Services.AddDbContext<SchoolDbContext>(options => options.UseSqlServer(appConfig.Connection, b => b.MigrationsAssembly("IMNAT.School.Models")));
-            Services.AddSingleton<SchoolManagement>();
-            Services.AddSingleton<ICourseManagement, CourseManagement>();
-            Services.AddSingleton<ICoursesRepo, CoursesRepo>();
-            Services.AddSingleton<IStudentrepo, StudentsRepo>();
-            Services.AddSingleton<IStudentManagement, StudentManagement>();
-        }
+                            Services.AddDbContext<SchoolDbContext>(options => options.UseSqlServer(appConfig.Connection, b => b.MigrationsAssembly("IMNAT.School.Models")));
+                            Services.AddSingleton<SchoolManagement>();    
+                        }
 
-        static int Main(string[] args)
-        {
-            
-            using (var scope = CreateServiceProvider().CreateScope())
-            {
-                
-               var Courses= scope.ServiceProvider.GetService<SchoolManagement>().GetAllCourses();
+                static int Main(string[] args)
+                {
+
+
+                    using (var scope = CreateServiceProvider().CreateScope())
+                    {
+                     //First we initialise with some data
+                scope.ServiceProvider.GetService<SchoolManagement>().SeedDatabase();
+
+                var Courses = scope.ServiceProvider.GetService<SchoolManagement>().GetAllCourses();
 
                 if (Courses != null)
                 {
@@ -168,31 +214,31 @@ namespace IMNAT.School.CLI
                 else
                 {
                     Console.WriteLine("Je dois me soumettre a Giovanni");
-                       return 0; 
-                        };
+                    return 0;
+                };
 
                 Console.WriteLine("--------------- Quel est vos Nom(s)?(dans cet ordre prenom(s)/nom):  ");
 
-                  var Noms = Console.ReadLine();
+                var Noms = Console.ReadLine();
 
                 Console.WriteLine("---------------  Ecrivez votre adresse courriel SVP?:   ");
 
                 var Courriel = Console.ReadLine();
 
-                 var Nom = scope.ServiceProvider.GetService<SchoolManagement>().CreateStudent(Noms, Courriel);
+                var Nom = scope.ServiceProvider.GetService<SchoolManagement>().CreateStudent(Noms, Courriel);
 
                 Console.WriteLine("------------ Entrer le numero du cours auquel vous souhaitez vous inscrire :  ");
 
                 var courseNoString = Console.ReadLine();
                 var courseNoInt = Int16.Parse(courseNoString);
-              
+
                 scope.ServiceProvider.GetService<SchoolManagement>().LinkStudentToCourse(Nom, courseNoInt);
 
                 Console.WriteLine("------ Souhaitez vous en ajouter d'autres a votre liste de cours? (Y/N) ");
 
                 var Option = Console.ReadLine();
 
-                while (Option == "Y") 
+                while (Option == "Y")
                 {
                     Console.WriteLine("------ Saisissez de nouveau l'option du cours. Tapez 'N' pour arreter et afficher vos selections ");
                     var Choix = Console.ReadLine();
@@ -201,7 +247,7 @@ namespace IMNAT.School.CLI
                     scope.ServiceProvider.GetService<SchoolManagement>().LinkStudentToCourse(Nom, ChoixInt);
                     Console.WriteLine("-------- Souhaitez vous en ajouter d'autres a votre liste de cours? (Y/N) ");
 
-                     Option = Console.ReadLine();
+                    Option = Console.ReadLine();
                 }
 
                 var Inscriptions = scope.ServiceProvider.GetService<SchoolManagement>().DisplaySelection();
@@ -218,11 +264,11 @@ namespace IMNAT.School.CLI
             }
         }
 
-        private class Factory : IDesignTimeDbContextFactory<SchoolDbContext>
-        {
-            public SchoolDbContext CreateDbContext(string[] args)
-                => CreateServiceProvider().CreateScope().ServiceProvider.GetService<SchoolDbContext>();
-        }
+                    private class Factory : IDesignTimeDbContextFactory<SchoolDbContext>
+                    {
+                        public SchoolDbContext CreateDbContext(string[] args)
+                            => CreateServiceProvider().CreateScope().ServiceProvider.GetService<SchoolDbContext>();
+                    }
 
     }
 
