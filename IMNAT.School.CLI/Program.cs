@@ -1,25 +1,18 @@
 ﻿using Db_Context;
-//using IMNAT.School.Models.Entities.DomainModels;
-using IMNAT.School.Services;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Hosting.Internal;
+using Db_Context.ViewModels;
+using IMNAT.School.Repositories.DAL;
+using IMNAT.School.Repositories.DAL.Repository;
+using IMNAT.School.Repositories.DAL.Repository.Implementations;
+using IMNAT.School.Services.Services;
+using IMNAT.School.Services.Services.Implementations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
-using IMNAT.School.Services.Services.Implementations;
-using IMNAT.School.Services.Services;
-using IMNAT.School.Repositories.DAL;
-using IMNAT.School.Repositories.DAL.Repository;
-using IMNAT.School.Repositories.DAL.Repository.Implementations;
-using Db_Context.ViewModels;
 using System.Data;
+using System.Linq;
 
 namespace IMNAT.School.CLI
 {
@@ -88,12 +81,9 @@ namespace IMNAT.School.CLI
             public Dictionary<string, IEnumerable<string>> DisplaySelection() {
 
                 Dictionary<string, IEnumerable<string>> AllSelections = new Dictionary<string, IEnumerable<string>>();
-                //List<string> RegisteredStudents = new List<string>();
-
-                //ist<string> CourseNames = new List<string> ();
-
-                var RegisteredStudents = from StudentNames in _SchoolDbContext.SelectedCourses.AsEnumerable()
-                                         select StudentNames.Student;
+                
+                var RegisteredStudents = from StudentNames in _SchoolDbContext.Students.AsEnumerable()
+                                         select StudentNames.LastName;
                            
                 foreach (string key in RegisteredStudents)
                 {
@@ -102,7 +92,11 @@ namespace IMNAT.School.CLI
                                       where s.Student == key
                                       select c.Name;
 
+                    AllSelections.Add(key, CourseNames);
+
                 }
+
+                return AllSelections;
 
             }
 
@@ -136,7 +130,6 @@ namespace IMNAT.School.CLI
         {
 
             var config = new ConfigurationBuilder()
-                  //.SetBasePath(Directory.GetCurrentDirectory())
                   .AddJsonFile("appsettings.json")
                   .Build();
 
@@ -201,7 +194,7 @@ namespace IMNAT.School.CLI
 
                 while (Option == "Y") 
                 {
-                    Console.WriteLine("------ Saisissez de nouveau l'option du cours. Tapez 'N' pour arreter et afficher vfos selections ");
+                    Console.WriteLine("------ Saisissez de nouveau l'option du cours. Tapez 'N' pour arreter et afficher vos selections ");
                     var Choix = Console.ReadLine();
                     var ChoixInt = Int16.Parse(Choix);
 
@@ -210,8 +203,16 @@ namespace IMNAT.School.CLI
 
                      Option = Console.ReadLine();
                 }
-                
 
+                var Inscriptions = scope.ServiceProvider.GetService<SchoolManagement>().DisplaySelection();
+
+                Console.WriteLine("-------- Voici la liste de tous les inscriptions suivants les noms d'etudiants \n\n\n");
+
+                foreach (string etudiant in Inscriptions.Keys)
+                {
+                    foreach (string cours in Inscriptions[etudiant])
+                        Console.WriteLine("{0} --------> {1}\n\n", etudiant, cours);
+                }
                 return 0;
 
             }
