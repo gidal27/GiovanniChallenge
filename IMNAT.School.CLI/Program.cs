@@ -19,6 +19,7 @@ using IMNAT.School.Repositories.DAL;
 using IMNAT.School.Repositories.DAL.Repository;
 using IMNAT.School.Repositories.DAL.Repository.Implementations;
 using Db_Context.ViewModels;
+using System.Data;
 
 namespace IMNAT.School.CLI
 {
@@ -50,7 +51,7 @@ namespace IMNAT.School.CLI
 
                 if (Names.Length > 2)
                 {
-                    for (int i = 0; i < Names.Length; i++)
+                    for (int i = 0; i < (Names.Length-1); i++)
                     { student.FirstName += (Names[i]+ " "); }
 
                     student.LastName = Names[(Names.Length - 1)];
@@ -82,13 +83,31 @@ namespace IMNAT.School.CLI
                 catch (Exception e) { Console.WriteLine(e.ToString()); }
             }
 
-        /*------------------------------------------------------------------------------------------------------*/
+            /*------------------------------------------------------------------------------------------------------*/
 
-            public void Run()
-                    {
-                        Console.WriteLine("Test de creation de la BD");
-                    }
-                
+            public Dictionary<string, IEnumerable<string>> DisplaySelection() {
+
+                Dictionary<string, IEnumerable<string>> AllSelections = new Dictionary<string, IEnumerable<string>>();
+                //List<string> RegisteredStudents = new List<string>();
+
+                //ist<string> CourseNames = new List<string> ();
+
+                var RegisteredStudents = from StudentNames in _SchoolDbContext.SelectedCourses.AsEnumerable()
+                                         select StudentNames.Student;
+                           
+                foreach (string key in RegisteredStudents)
+                {
+                    var CourseNames = from c in _SchoolDbContext.Courses
+                                      join s in _SchoolDbContext.SelectedCourses on c.Id equals s.SelectedCourseID
+                                      where s.Student == key
+                                      select c.Name;
+
+                }
+
+            }
+
+        /*--------------------------------------------------------------------------------------------------------*/
+         
             
         }
         public class MySettings
@@ -176,7 +195,22 @@ namespace IMNAT.School.CLI
               
                 scope.ServiceProvider.GetService<SchoolManagement>().LinkStudentToCourse(Nom, courseNoInt);
 
-                Console.WriteLine("------ Souhaitez vous en choisir d'autres?")
+                Console.WriteLine("------ Souhaitez vous en ajouter d'autres a votre liste de cours? (Y/N) ");
+
+                var Option = Console.ReadLine();
+
+                while (Option == "Y") 
+                {
+                    Console.WriteLine("------ Saisissez de nouveau l'option du cours. Tapez 'N' pour arreter et afficher vfos selections ");
+                    var Choix = Console.ReadLine();
+                    var ChoixInt = Int16.Parse(Choix);
+
+                    scope.ServiceProvider.GetService<SchoolManagement>().LinkStudentToCourse(Nom, ChoixInt);
+                    Console.WriteLine("-------- Souhaitez vous en ajouter d'autres a votre liste de cours? (Y/N) ");
+
+                     Option = Console.ReadLine();
+                }
+                
 
                 return 0;
 
